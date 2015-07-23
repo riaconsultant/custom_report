@@ -3,7 +3,7 @@ jQuery.sap.require("jquery.sap.resources");
 function createReport(url,key,tableData)
 {
 var sLocale = sap.ui.getCore().getConfiguration().getLanguage();
-	
+var index;
 	var oMatrix = new sap.ui.commons.layout.MatrixLayout({
 
 		layoutFixed : true,
@@ -32,6 +32,7 @@ var sLocale = sap.ui.getCore().getConfiguration().getLanguage();
 		lbl=new Label({text:Labels[i]});
 		//txt=new TextField();
 		txt = eval("new sap.ui.commons"+"."+fieldType[i]);
+		
 		arr2.push([lbl,txt]);	
 		j++;
 
@@ -125,8 +126,9 @@ columnData.splice(0,0,"Select");
 		    	if(oContext.getObject() == "Select"){
 		    		var Label = "";
 		    		var currTemplate = new sap.ui.commons.CheckBox({change:function(evt){
+		    			index = this.getParent().getIndex();
 		    			if(evt.mParameters.checked)
-		    			openCreateLocalVersionPopUp();
+		    			openCreateLocalVersionPopUp(index);
 		    			
 		    		}}).bindProperty("checked",oContext.getObject());
 		    		var currwidth = "100px";
@@ -151,14 +153,112 @@ columnData.splice(0,0,"Select");
 		    
 		    ///Dialog opens on click of checkBox
 		    
-		    oDialog = new sap.ui.commons.Dialog({minHeight: '400px', minWidth: '820px',modal:true});
-			 function openCreateLocalVersionPopUp() {
-				 oDialog.setTitle("Add Transfer Request");
+
+		    
+		    
+		    oDialog = new sap.ui.commons.Dialog({minHeight: '300px', minWidth: '300px',modal:true});
+			 function openCreateLocalVersionPopUp(index) {
+				var omemverticallayout = createDialogTable(index);
+				oDialog.destroyContent();
+				 oDialog.setTitle("Raise Ticket Request");
 				 oDialog.destroyButtons();
-				 //oDialog.addContent();
-				 oDialog.addButton(new sap.ui.commons.Button({text: "OK", press:function(){oDialog.close();}}));
+				 oDialog.addContent(omemverticallayout);
+				 oDialog.addButton(new sap.ui.commons.Button({text: "Submit", press:function(){
+					 
+					 debugger;
+					 oTable.getBinding().oList[index].Select=false;
+					 oTable.rerender();
+					 oDialog.close();
+					 sap.ui.commons.MessageBox
+						.alert(
+								"Ticket Number is generated!",
+								"",
+								"Information");
+				 }}));
+				 oDialog.addButton(new sap.ui.commons.Button({text: "Cancel", press:function(){
+					 
+					 oTable.getBinding().oList[index].Select=false;
+					 oTable.rerender();
+					 oDialog.close();}}));
 				 oDialog.open();
 			   //oController.sorter();
+			 }
+			 
+			 function createDialogTable(index){
+				 debugger;
+				 var dialTabledata=[];
+				    dialTabledata.push(tableData[index]);
+					  //table dynamic creation
+						var odialModel = new sap.ui.model.json.JSONModel();
+						odialModel.setData({	
+					        columns : columnData,
+					        rows    : dialTabledata
+					    });
+						 var odialTable = new sap.ui.table.Table({
+							 selectionBehavior:sap.ui.table.SelectionBehavior.Row ,
+							 selectionMode: sap.ui.table.SelectionMode.Single,
+							 visibleRowCount : 1,
+
+							 rowSelectionChange:function(oEvt)
+								{
+
+								}
+							    
+						 });
+
+						 
+						 odialTable.setWidth("600px");
+						 odialTable.setModel(odialModel);
+
+						    
+						 odialTable.bindColumns("/columns", function(sId, oContext) {
+						    	var sKeys = Object.keys(oContext.getObject());
+						    	if(oContext.getObject() == "Select"){
+						    		var Label = "";
+						    		var currTemplate = new sap.ui.commons.CheckBox({change:function(evt){
+						    			if(evt.mParameters.checked)
+						    			openCreateLocalVersionPopUp();
+						    			
+						    		}}).bindProperty("checked",oContext.getObject());
+						    	}
+						    	else{
+						    		var Label = oContext.getObject();
+						    		var currTemplate = new sap.ui.commons.TextView().bindProperty("text",oContext.getObject());
+						    	}
+						        return new sap.ui.table.Column({
+						           // id : sKeys[0],
+						        	width:"100px",
+						            label: Label, 
+						            template: currTemplate, 
+						            sortProperty: oContext.getObject(), 
+						            filterProperty: oContext.getObject(),
+						            hAlign:"Center"
+						        });
+						    });
+						    
+						 odialTable.bindRows("/rows");
+						 odialTable.getColumns()[0].setVisible(false);
+					    
+					    var oLabel = new sap.ui.commons.Label({
+					    	text:"Comment"
+					    });
+					    
+					    var otextArea = new sap.ui.commons.TextArea({
+					    	rows:3,width:"400px"
+					    });
+					    
+					    var otickethlayout = new sap.ui.commons.layout.HorizontalLayout({
+						//height : "300px",
+						width : "100%",
+						content:[oLabel,otextArea]
+					    });
+					    
+					    var omemverticallayout = new sap.ui.commons.layout.VerticalLayout({
+							//height : "600px",
+							width : "100%",
+							content:[odialTable,otickethlayout]
+						});				 
+				 return omemverticallayout;
 			 }
 		    
 		    /////////////////////////////////
@@ -190,3 +290,10 @@ columnData.splice(0,0,"Select");
 	
 
 	}
+
+function searchJSONdata(){
+	
+	
+}
+
+
