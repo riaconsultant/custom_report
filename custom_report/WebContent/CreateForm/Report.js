@@ -125,6 +125,7 @@ columnData.splice(0,0,"Select");
 		    	if(oContext.getObject() == "Select"){
 		    		var Label = "";
 		    		var currTemplate = new sap.ui.commons.CheckBox({change:function(evt){
+		    			if(evt.mParameters.checked)
 		    			openCreateLocalVersionPopUp();
 		    			
 		    		}}).bindProperty("checked",oContext.getObject());
