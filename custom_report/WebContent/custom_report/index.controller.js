@@ -35,4 +35,10 @@ sap.ui.controller("custom_report.index", {
 //
 //	}
 
+	createForm:function(url)
+	{
+		
+		var form=createReport(url,"ASN_INPUT",tabledata);
+		return form;
+	}
 });

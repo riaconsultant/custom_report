@@ -13,7 +13,8 @@ sap.ui.jsview("custom_report.index", {
 	* @memberOf custom_report.index
 	*/ 
 	createContent : function(oController) {
-
+		var form=oController.createForm("/custom_report/i18n/german.properties");
+		return form;
 	}
 
 });
