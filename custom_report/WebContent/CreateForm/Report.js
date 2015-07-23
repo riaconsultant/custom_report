@@ -22,6 +22,7 @@ var index;
 	var numLables=Labels.length;
 	var j=0;
 	
+	
 	var fieldType=oBundle.getText("ASN_FIELDTYPE");
 	fieldType=fieldType.split(",");
 
