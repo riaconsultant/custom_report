@@ -62,7 +62,9 @@ var index;
            resultModel.loadData("localJSON/Result.json");
 		
 		var searchButton = new sap.ui.commons.Button({text:"Search",press:function(){
-			oTable.setModel(resultModel);
+			//oTable.setModel(resultModel);
+			//Service call to happen.
+			
 		}});
 		
 		
@@ -105,7 +107,7 @@ columnData.splice(0,0,"Select");
 	        columns : columnData,
 	        rows    : tableData
 	    });
-		 var oTable = new sap.ui.table.Table({
+		  oTable = new sap.ui.table.Table({
 			 selectionBehavior:sap.ui.table.SelectionBehavior.Row ,
 			 selectionMode: sap.ui.table.SelectionMode.Single,
 
