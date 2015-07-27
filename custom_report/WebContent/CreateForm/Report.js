@@ -4,53 +4,54 @@ function createReport(url,key,tableData)
 {
 var sLocale = sap.ui.getCore().getConfiguration().getLanguage();
 var index;
+//Matrix layout for dynamic report UI genaration
 	var oMatrix = new sap.ui.commons.layout.MatrixLayout({
 
 		layoutFixed : true,
 		width : '100%',
 		columns : 6,
 		widths : ['10%', '20%', '10%', '20%','10%','20%'] });
-	var Cell = sap.ui.commons.layout.MatrixLayoutCell;
-	var Label= sap.ui.commons.Label;
-	var TextField= sap.ui.commons.TextField;
-	var panelName = key.split("_");
+	var oCell = sap.ui.commons.layout.MatrixLayoutCell;
+	var oLabel= sap.ui.commons.Label;
+	var oTextField= sap.ui.commons.TextField;
+	var sPanelName = key.split("_");
 	
 	var oBundle = jQuery.sap.resources({url : url, locale: "de"});
-	var value=oBundle.getText(key);
-	var Labels=value.split(",");
-	var arr2=[];
-	var numLables=Labels.length;
+	var sValue=oBundle.getText(key);
+	var aLabels=sValue.split(",");
+	var aLayout=[];
+	//var numLables=aLabels.length;
 	var j=0;
 	
 	
-	var fieldType=oBundle.getText("ASN_FIELDTYPE");
-	fieldType=fieldType.split(",");
+	var aFieldType=oBundle.getText("ASN_FIELDTYPE");
+	aFieldType=aFieldType.split(",");
 
 //input fields	
-	for (var i=0;i<numLables;i++)
+	for (var i=0;i<aLabels.length;i++)
 		{
 	
-		lbl=new Label({text:Labels[i]});
-		//txt=new TextField();
-		txt = eval("new sap.ui.commons"+"."+fieldType[i]);
+		oDynamicLbl=new oLabel({text:aLabels[i]});
+		oDynamicTxt = eval("new sap.ui.commons"+"."+aFieldType[i]);
 		
-		arr2.push([lbl,txt]);	
+		aLayout.push([oDynamicLbl,oDynamicTxt]);	
 		j++;
 
-		
+		//Logic for 6 cell layout
+		//add 3 labels and 3 other controls then create a new row
 		if(j==3){
-		oMatrix.createRow(arr2[0][0],arr2[0][1],arr2[1][0],arr2[1][1],arr2[2][0],arr2[2][1]);
+		oMatrix.createRow(aLayout[0][0],aLayout[0][1],aLayout[1][0],aLayout[1][1],aLayout[2][0],aLayout[2][1]);
 	j=0;
-	arr2=[];
+	aLayout=[];
 		}
 	
 		}
-		if(arr2.length%3!=0)
+		if(aLayout.length%3!=0)
 		{
-		if(arr2.length==2)
-		oMatrix.createRow(arr2[0][0],arr2[0][1],arr2[1][0],arr2[1][1]);
+		if(aLayout.length==2)
+		oMatrix.createRow(aLayout[0][0],aLayout[0][1],aLayout[1][0],aLayout[1][1]);
 		else
-		oMatrix.createRow(arr2[0][0],arr2[0][1]);
+		oMatrix.createRow(aLayout[0][0],aLayout[0][1]);
 		}
 		
 		
@@ -58,33 +59,33 @@ var index;
 		////Search and Cancel button//////////////
 		
 		///Loading Local JSON file////
-		 var resultModel = new sap.ui.model.json.JSONModel();
-           resultModel.loadData("localJSON/Result.json");
+		 var oResultModel = new sap.ui.model.json.JSONModel();
+           oResultModel.loadData("localJSON/Result.json");
 		
-		var searchButton = new sap.ui.commons.Button({text:"Search",press:function(){
-			//oTable.setModel(resultModel);
+		var oSearchButton = new sap.ui.commons.Button({text:"Search",press:function(){
+			//oTable.setModel(oResultModel);
 			//Service call to happen.
 			
 		}});
 		
 		
-		var cancelButton = new sap.ui.commons.Button({text:"Cancel",press:function(){
+		var oCancelButton = new sap.ui.commons.Button({text:"Cancel",press:function(){
 			
 		}});
 		
-		var htoolbar= new sap.ui.commons.Toolbar({
+		var oHorizontalToolbar= new sap.ui.commons.Toolbar({
   			//width: "59%",
   			visible:true
   		});
-		htoolbar.addItem(searchButton);
-		htoolbar.addItem(cancelButton);
-		oMatrix.createRow(htoolbar);
+		oHorizontalToolbar.addItem(oSearchButton);
+		oHorizontalToolbar.addItem(oCancelButton);
+		oMatrix.createRow(oHorizontalToolbar);
 		
-		  var headerPanel= new sap.ui.commons.Panel({
+		  var oHeaderPanel= new sap.ui.commons.Panel({
   			areaDesign : sap.ui.commons.enums.AreaDesign.Plain, // sap.ui.commons.enums.AreaDesign
   			borderDesign : sap.ui.commons.enums.BorderDesign.Box, // sap.ui.commons.enums.BorderDesign
   			showCollapseIcon : false, // boolean
-  			text : panelName[0], // string
+  			text : sPanelName[0], // string
   					content : [oMatrix] // sap.ui.core.Control,
   					           
   			//width: "1000px"		           
@@ -92,10 +93,10 @@ var index;
   		});
 		//////////////////////////////////////////
         //////////////////////////////////////////	
- //output table
-var output=oBundle.getText("ASN_OUTPUT");
-var columnData=output.split(",");
-columnData.splice(0,0,"Select");
+ //sOutput table
+var sOutput=oBundle.getText("ASN_OUTPUT");
+var aColumnData=sOutput.split(",");
+aColumnData.splice(0,0,"Select");
 // do json data for columndata
 
 
@@ -104,7 +105,7 @@ columnData.splice(0,0,"Select");
 //table dynamic creation
 		var oModel = new sap.ui.model.json.JSONModel();
 	    oModel.setData({	
-	        columns : columnData,
+	        columns : aColumnData,
 	        rows    : tableData
 	    });
 		  oTable = new sap.ui.table.Table({
@@ -123,7 +124,7 @@ columnData.splice(0,0,"Select");
 		 oTable.setWidth("1400px");
 		    oTable.setModel(oModel);
 
-		    
+		    //Creating columns dynamically.
 		    oTable.bindColumns("/columns", function(sId, oContext) {
 		    	var sKeys = Object.keys(oContext.getObject());
 		    	if(oContext.getObject() == "Select"){
@@ -156,16 +157,13 @@ columnData.splice(0,0,"Select");
 		    
 		    ///Dialog opens on click of checkBox
 		    
-
-		    
-		    
 		    oDialog = new sap.ui.commons.Dialog({minHeight: '300px', minWidth: '300px',modal:true});
 			 function openCreateLocalVersionPopUp(index) {
-				var omemverticallayout = createDialogTable(index);
+				var oMemoVlayout = createDialogTable(index);
 				oDialog.destroyContent();
 				 oDialog.setTitle("Raise Ticket Request");
 				 oDialog.destroyButtons();
-				 oDialog.addContent(omemverticallayout);
+				 oDialog.addContent(oMemoVlayout);
 				 oDialog.addButton(new sap.ui.commons.Button({text: "Submit", press:function(){
 					 
 					 debugger;
@@ -189,15 +187,16 @@ columnData.splice(0,0,"Select");
 			 
 			 function createDialogTable(index){
 				 debugger;
-				 var dialTabledata=[];
-				    dialTabledata.push(tableData[index]);
+				 ////Table created dynamically for header table in pop-up.
+				 var aDialTabledata=[];
+				    aDialTabledata.push(tableData[index]);
 					  //table dynamic creation
 						var odialModel = new sap.ui.model.json.JSONModel();
 						odialModel.setData({	
-					        columns : columnData,
-					        rows    : dialTabledata
+					        columns : aColumnData,
+					        rows    : aDialTabledata
 					    });
-						 var odialTable = new sap.ui.table.Table({
+						 var oDialTable = new sap.ui.table.Table({
 							 selectionBehavior:sap.ui.table.SelectionBehavior.Row ,
 							 selectionMode: sap.ui.table.SelectionMode.Single,
 							 visibleRowCount : 1,
@@ -210,11 +209,11 @@ columnData.splice(0,0,"Select");
 						 });
 
 						 
-						 odialTable.setWidth("600px");
-						 odialTable.setModel(odialModel);
+						 oDialTable.setWidth("600px");
+						 oDialTable.setModel(odialModel);
 
 						    
-						 odialTable.bindColumns("/columns", function(sId, oContext) {
+						 oDialTable.bindColumns("/columns", function(sId, oContext) {
 						    	var sKeys = Object.keys(oContext.getObject());
 						    	if(oContext.getObject() == "Select"){
 						    		var Label = "";
@@ -239,64 +238,282 @@ columnData.splice(0,0,"Select");
 						        });
 						    });
 						    
-						 odialTable.bindRows("/rows");
-						 odialTable.getColumns()[0].setVisible(false);
+						 oDialTable.bindRows("/rows");
+						 oDialTable.getColumns()[0].setVisible(false);
 					    
 					    var oLabel = new sap.ui.commons.Label({
 					    	text:"Comment"
 					    });
 					    
-					    var otextArea = new sap.ui.commons.TextArea({
+					    var oTextArea = new sap.ui.commons.TextArea({
 					    	rows:3,width:"400px"
 					    });
 					    
-					    var otickethlayout = new sap.ui.commons.layout.HorizontalLayout({
+					    var oTicketHlayout = new sap.ui.commons.layout.HorizontalLayout({
 						//height : "300px",
 						width : "100%",
-						content:[oLabel,otextArea]
+						content:[oLabel,oTextArea]
 					    });
 					    
-					    var omemverticallayout = new sap.ui.commons.layout.VerticalLayout({
+					    var oMemoVlayout = new sap.ui.commons.layout.VerticalLayout({
 							//height : "600px",
 							width : "100%",
-							content:[odialTable,otickethlayout]
+							content:[oDialTable,oTicketHlayout]
 						});				 
-				 return omemverticallayout;
+				 return oMemoVlayout;
 			 }
 		    
 		    /////////////////////////////////
-		    
-		    
-		    /*var oCell = new sap.ui.commons.layout.MatrixLayoutCell({
-		    	colSpan: 5 });
-
-
-		    oCell.addContent(oTable);
-		    oMatrix.createRow(oCell);*/
-		    
-		    var tablePanel= new sap.ui.commons.Panel({
+		    ////Main Table panel/////////////
+		    var oTablePanel= new sap.ui.commons.Panel({
 	  			areaDesign : sap.ui.commons.enums.AreaDesign.Plain, // sap.ui.commons.enums.AreaDesign
 	  			borderDesign : sap.ui.commons.enums.BorderDesign.Box, // sap.ui.commons.enums.BorderDesign
 	  			showCollapseIcon : false, // boolean
-	  			text : panelName[0] +" "+"Table", // string
+	  			text : sPanelName[0] +" "+"Table", // string
 	  					content : [oTable] // sap.ui.core.Control,
 	  					           
 	  			//width: "1000px"		           
 	  		// sap.ui.commons.Button
 	  		});
-		var olayout = new sap.ui.commons.layout.VerticalLayout({
-			content:[headerPanel,tablePanel]
+		    
+		    var oExcelDownloadBtn = new sap.ui.commons.Button({
+		    	text:"Export",
+		    	press:function(){
+		    	debugger;
+		    	excelDownload(oTable,aColumnData);
+		    	}
+		    });
+		    var csvText = generateTableCSV(oTable,oTable.getBinding().oList); 
+		    var oExcelDownloadLink  = createDownloadLink(csvText);
+		var oMainVlayout = new sap.ui.commons.layout.VerticalLayout({
+			content:[oHeaderPanel,oTablePanel,oExcelDownloadLink]
 		});    
 		   
-		return olayout;
+		return oMainVlayout;
 	//return oMatrix;
 	
 
 	}
 
-function searchJSONdata(){
-	
-	
+/**
+* Creates a link target to base64 data
+*/
+function createDownloadLink(b64text) {
+  var oLink = new sap.ui.commons.Link("linkExportCsv", {
+  text: 'Download as Excel',
+  href: 'data:application/vnd.ms-excel;charset=utf-8;base64,' + (Base64.encode(b64text))
+  });
+ 
+  initDownloadAttr('FileName-Example.xls')
+ 
+  return oLink;
 }
 
+/**
+* Creates download attribute to set filename
+*/
+function initDownloadAttr() {
+  if ($( "#linkExportCsv" ).length > 0) {
+  $( "#linkExportCsv" ).attr('download', 'filename.xls');
+  } else {
+  setTimeout(initDownloadAttr, 1000);
+  }
+}
+
+/**
+* Export table header and data into a CSV string.
+*/
+function generateTableCSV(table, jsonData) {
+  var info = '';
+ 
+  for (var i =0; i<table.getColumns().length; i++) {
+  info+= encodeURIComponent(table.getColumns()[i].getLabel().getText()) + '\t';
+  }
+ 
+  info += '\r\n';
+ 
+  if (jsonData.length != undefined) {
+  for (var j=0; j<jsonData.length; j++) {
+  for (var i =0; i<table.getColumns().length; i++) {
+  if (table.getColumns()[i].getTemplate() != undefined && table.getColumns()[i].getTemplate().getBinding('text') != undefined) {
+  var valor = eval('jsonData[j].'+table.getColumns()[i].getTemplate().getBinding('text').sPath);
+  info+= encodeURIComponent(valor) + '\t';
+  } else if (table.getColumns()[i].getTemplate() != undefined && table.getColumns()[i].getTemplate().getBinding('value') != undefined) {
+  var valor = eval('jsonData[j].'+table.getColumns()[i].getTemplate().getBinding('value').sPath);
+  info+= encodeURIComponent(valor) + '\t';
+  } else
+  info+= '\t';
+  }
+  info += '\r\n';
+  }
+  } else {
+  $.each(jsonData, function(key,value){
+  for (var i =0; i<table.getColumns().length; i++) {
+  if (table.getColumns()[i].getTemplate() != undefined && table.getColumns()[i].getTemplate().getBinding('text') != undefined) {
+  var valor = eval('jsonData[j].'+table.getColumns()[i].getTemplate().getBinding('text').sPath);
+  info+= encodeURIComponent(valor) + '\t';
+  } else if (table.getColumns()[i].getTemplate() != undefined && table.getColumns()[i].getTemplate().getBinding('value') != undefined) {
+  var valor = eval('jsonData[j].'+table.getColumns()[i].getTemplate().getBinding('value').sPath);
+  info+= encodeURIComponent(valor) + '\t';
+  } else
+  info+= '\t';
+  }
+  info += '\r\n';
+  });
+  }
+ 
+  return info;
+}
+
+
+//Add to Base 64 util
+
+/**
+*
+*  Base64 encode / decode
+*  http://www.webtoolkit.info/
+*
+**/
+ 
+var Base64 = {
+ 
+  // private property
+  _keyStr : "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
+ 
+  // public method for encoding
+  encode : function (input) {
+  var output = "";
+  var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
+  var i = 0;
+ 
+  input = Base64._utf8_encode(input);
+ 
+  while (i < input.length) {
+ 
+  chr1 = input.charCodeAt(i++);
+  chr2 = input.charCodeAt(i++);
+  chr3 = input.charCodeAt(i++);
+ 
+  enc1 = chr1 >> 2;
+  enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+  enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+  enc4 = chr3 & 63;
+ 
+  if (isNaN(chr2)) {
+  enc3 = enc4 = 64;
+  } else if (isNaN(chr3)) {
+  enc4 = 64;
+  }
+ 
+  output = output +
+  this._keyStr.charAt(enc1) + this._keyStr.charAt(enc2) +
+  this._keyStr.charAt(enc3) + this._keyStr.charAt(enc4);
+ 
+  }
+ 
+  return output;
+  },
+ 
+  // public method for decoding
+  decode : function (input) {
+  var output = "";
+  var chr1, chr2, chr3;
+  var enc1, enc2, enc3, enc4;
+  var i = 0;
+ 
+  input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
+ 
+  while (i < input.length) {
+ 
+  enc1 = this._keyStr.indexOf(input.charAt(i++));
+  enc2 = this._keyStr.indexOf(input.charAt(i++));
+  enc3 = this._keyStr.indexOf(input.charAt(i++));
+  enc4 = this._keyStr.indexOf(input.charAt(i++));
+ 
+  chr1 = (enc1 << 2) | (enc2 >> 4);
+  chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
+  chr3 = ((enc3 & 3) << 6) | enc4;
+ 
+  output = output + String.fromCharCode(chr1);
+ 
+  if (enc3 != 64) {
+  output = output + String.fromCharCode(chr2);
+  }
+  if (enc4 != 64) {
+  output = output + String.fromCharCode(chr3);
+  }
+ 
+  }
+ 
+  output = Base64._utf8_decode(output);
+ 
+  return output;
+ 
+  },
+ 
+  // private method for UTF-8 encoding
+  _utf8_encode : function (string) {
+  string = string.replace(/\r\n/g,"\n");
+  var utftext = "";
+ 
+  for (var n = 0; n < string.length; n++) {
+ 
+  var c = string.charCodeAt(n);
+ 
+  if (c < 128) {
+  utftext += String.fromCharCode(c);
+  }
+  else if((c > 127) && (c < 2048)) {
+  utftext += String.fromCharCode((c >> 6) | 192);
+  utftext += String.fromCharCode((c & 63) | 128);
+  }
+  else {
+  utftext += String.fromCharCode((c >> 12) | 224);
+  utftext += String.fromCharCode(((c >> 6) & 63) | 128);
+  utftext += String.fromCharCode((c & 63) | 128);
+  }
+ 
+  }
+ 
+  return utftext;
+  },
+ 
+  // private method for UTF-8 decoding
+  _utf8_decode : function (utftext) {
+  var string = "";
+  var i = 0;
+  var c = c1 = c2 = 0;
+ 
+  while ( i < utftext.length ) {
+ 
+  c = utftext.charCodeAt(i);
+ 
+  if (c < 128) {
+  string += String.fromCharCode(c);
+  i++;
+  }
+  else if((c > 191) && (c < 224)) {
+  c2 = utftext.charCodeAt(i+1);
+  string += String.fromCharCode(((c & 31) << 6) | (c2 & 63));
+  i += 2;
+  }
+  else {
+  c2 = utftext.charCodeAt(i+1);
+  c3 = utftext.charCodeAt(i+2);
+  string += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
+  i += 3;
+  }
+ 
+  }
+ 
+  return string;
+  }
+ 
+}
+
+
+function excelDownload(oTable,aColumnData){
+    //exportToExcel(tableId, oModel);
+    JSONToCSVConvertor(oTable.getBinding().oList,"Report", true,aColumnData);
+}
 
