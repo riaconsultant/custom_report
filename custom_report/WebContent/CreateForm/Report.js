@@ -301,7 +301,23 @@ aColumnData.splice(0,0,"Select");
 function createDownloadLink(b64text) {
   var oLink = new sap.ui.commons.Link("linkExportCsv", {
   text: 'Download as Excel',
-  href: 'data:application/vnd.ms-excel;charset=utf-8;base64,' + (Base64.encode(b64text))
+  press:function(){
+	  var base64 = Base64.encode(b64text);
+		var apptype = "application/xls";
+		var u8_2 = new Uint8Array(atob(base64).split("").map(function(c) {
+			return c.charCodeAt(0);
+		}));
+		var blob = new Blob( [ u8_2 ], { 
+			type: apptype 
+			
+		});
+		
+
+//debugger;
+//window.saveAs(blob, sap.ui.getCore().byId("tabnam").getValue());
+window.saveAs(blob, "Download"+".xls");
+  }
+ // href: 'data:application/vnd.ms-excel;charset=utf-8;base64,' + (Base64.encode(b64text))
   });
  
   initDownloadAttr('FileName-Example.xls')
@@ -511,6 +527,45 @@ var Base64 = {
  
 }
 
+//*********For Saveas Popup download link
+window.saveAs || ( window.saveAs = (window.navigator.msSaveBlob ? function(b,n){ return window.navigator.msSaveBlob(b,n); } : false) || window.webkitSaveAs || window.mozSaveAs || window.msSaveAs || (function(){
+	 
+	// URL's
+	window.URL || (window.URL = window.webkitURL);
+ 
+	if(!window.URL){
+		return false;
+	}
+ 
+	return function(blob,name){
+		var url = URL.createObjectURL(blob);
+ 
+		// Test for download link support
+		if( "download" in document.createElement('a') ){
+//			debugger;
+			var a = document.createElement('a');
+			a.setAttribute('href', url);
+			a.setAttribute('download', name);
+ 
+			// Create Click event
+			var clickEvent = document.createEvent ("MouseEvent");
+			clickEvent.initMouseEvent ("click", true, true, window, 0, 
+				event.screenX, event.screenY, event.clientX, event.clientY, 
+				event.ctrlKey, event.altKey, event.shiftKey, event.metaKey, 
+				0, null);
+ 
+			// dispatch click event to simulate download
+			a.dispatchEvent (clickEvent);
+ 
+		}
+		else{
+			// fallover, open resource in new tab.
+			window.open(url, '_blank', '');
+		}
+	};
+ 
+})() );
+//**********
 
 function excelDownload(oTable,aColumnData){
     //exportToExcel(tableId, oModel);
