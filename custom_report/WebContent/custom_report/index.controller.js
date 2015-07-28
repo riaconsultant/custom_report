@@ -37,8 +37,60 @@ sap.ui.controller("custom_report.index", {
 
 	createForm:function(url)
 	{
-		
+		/*if(window.location.href.split("?")[1]=="asn")
 		var form=createReport(url,"ASN_INPUT",tabledata);
+		else if(window.location.href.split("?")[1]=="bar")
+			var form=createReport(url,"BAR_INPUT",tabledata);*/
+		
+		var sKey = window.location.href.split("?")[1];
+		switch(sKey){
+		case "asn":
+			var form=createReport(url,"ASN_INPUT",tabledata);
+			break;
+		case "bar": 
+			var form=createReport(url,"BAR_INPUT",tabledata);
+			break;
+		case "grn": 
+			var form=createReport(url,"GRN_INPUT",tabledata);
+			break;
+		case "grndesc": 
+			var form=createReport(url,"GRN_DESC_INPUT",tabledata);
+			break;
+		case "otif": 
+			var form=createReport(url,"OTIF_INPUT",tabledata);
+			break;
+		case "qreport": 
+			var form=createReport(url,"QUALITY_INPUT",tabledata);
+			break;
+		case "rreport": 
+			var form=createReport(url,"RATING_INPUT",tabledata);
+			break;
+		case "vreport": 
+			var form=createReport(url,"RVENDOR_INPUT",tabledata);
+			break;
+		case "sreport": 
+			var form=createReport(url,"SALES_INPUT",tabledata);
+			break;
+		case "sohreport": 
+			var form=createReport(url,"SOH_INPUT",tabledata);
+			break;
+		case "ireport": 
+			var form=createReport(url,"INVOICE_INPUT",tabledata);
+			break;
+		case "lreport": 
+			var form=createReport(url,"LEDGER_INPUT",tabledata);
+			break;
+		case "creport": 
+			var form=createReport(url,"CREDIT_INPUT",tabledata);
+			break;
+		case "preport": 
+			var form=createReport(url,"PAYMENT_INPUT",tabledata);
+			break;
+			
+			
+		}
+			
+		
 		return form;
 	}
 });
