@@ -27,51 +27,51 @@ var index=[];
 	var sKey = window.location.href.split("?")[1];
 	switch(sKey){
 	case "asn":
-		var aFieldType=oBundle.getText("ASN_FIELDTYPE");
+		var sFieldType=oBundle.getText("ASN_FIELDTYPE");
 		break;
 	case "bar": 
-		var aFieldType=oBundle.getText("BAR_FIELDTYPE");
+		var sFieldType=oBundle.getText("BAR_FIELDTYPE");
 		break;
 	case "grn": 
-		var aFieldType=oBundle.getText("GRN_FIELDTYPE");
+		var sFieldType=oBundle.getText("GRN_FIELDTYPE");
 		break;
 	case "grndesc": 
-		var aFieldType=oBundle.getText("GRN_DESC_FIELDTYPE");
+		var sFieldType=oBundle.getText("GRN_DESC_FIELDTYPE");
 		break;
 	case "otif": 
-		var aFieldType=oBundle.getText("OTIF_FIELDTYPE");
+		var sFieldType=oBundle.getText("OTIF_FIELDTYPE");
 		break;
 	case "qreport": 
-		var aFieldType=oBundle.getText("QUALITY_FIELDTYPE");
+		var sFieldType=oBundle.getText("QUALITY_FIELDTYPE");
 		break;
 	case "rreport": 
-		var aFieldType=oBundle.getText("RATING_FIELDTYPE");
+		var sFieldType=oBundle.getText("RATING_FIELDTYPE");
 		break;
 	case "vreport": 
-		var aFieldType=oBundle.getText("RVENDOR_FIELDTYPE");
+		var sFieldType=oBundle.getText("RVENDOR_FIELDTYPE");
 		break;
 	case "sreport": 
-		var aFieldType=oBundle.getText("SALES_FIELDTYPE");
+		var sFieldType=oBundle.getText("SALES_FIELDTYPE");
 		break;
 	case "sohreport": 
-		var aFieldType=oBundle.getText("SOH_FIELDTYPE");
+		var sFieldType=oBundle.getText("SOH_FIELDTYPE");
 		break;
 	case "ireport": 
-		var aFieldType=oBundle.getText("INVOICE_FIELDTYPE");
+		var sFieldType=oBundle.getText("INVOICE_FIELDTYPE");
 		break;
 	case "lreport": 
-		var aFieldType=oBundle.getText("LEDGER_FIELDTYPE");
+		var sFieldType=oBundle.getText("LEDGER_FIELDTYPE");
 		break;
 	case "creport": 
-		var aFieldType=oBundle.getText("CREDIT_FIELDTYPE");
+		var sFieldType=oBundle.getText("CREDIT_FIELDTYPE");
 		break;
 	case "preport": 
-		var aFieldType=oBundle.getText("PAYMENT_FIELDTYPE");
+		var sFieldType=oBundle.getText("PAYMENT_FIELDTYPE");
 		break;
 		
 		
 	}
-	aFieldType=aFieldType.split(",");
+	var aFieldType=sFieldType.split(",");
 
 //input fields	
 	for (var i=0;i<aLabels.length;i++)
