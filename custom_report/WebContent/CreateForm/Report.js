@@ -297,11 +297,7 @@ aColumnData.splice(0,0,"Select");
 						//app.removePage(sap.ui.getCore().byId("idindex1"));
 						app.insertPage(newPage);
 						app.to(newPage,"show");
-						//app.insertPage(newPage);
-						//app.rerender();
-						//app.placeAt("content");
-						
-					/////	
+					///////////////////////////////////////////////////
 					 
 					 
 					 //Ticket number generated later.
