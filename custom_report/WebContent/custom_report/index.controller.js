@@ -42,6 +42,8 @@ sap.ui.controller("custom_report.index", {
 		else if(window.location.href.split("?")[1]=="bar")
 			var form=createReport(url,"BAR_INPUT",tabledata);*/
 		
+		//tabledata is obtained initially from Oninit initially and when click of search button tabledata is changed.
+		//using dummy json data in tabledata now.
 		var sKey = window.location.href.split("?")[1];
 		switch(sKey){
 		case "asn":

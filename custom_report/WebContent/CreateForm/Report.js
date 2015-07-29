@@ -73,24 +73,101 @@ var index=[];
 	}
 	var aFieldType=sFieldType.split(",");
 
-//input fields	
+	//input fields	
 	for (var i=0;i<aLabels.length;i++)
 		{
 	
 		
 		oDynamicTxt = eval("new sap.ui.commons"+"."+aFieldType[i]);
-		oDynamicLbl=new oLabel({text:aLabels[i]}).setLabelFor(oDynamicTxt);
+		///Logic to format the label names/////////////////
+		var sLabel = aLabels[i].replace(/([a-z])([A-Z])/g, '$1 $2').substr(0, 1).toUpperCase()+aLabels[i].replace(/([a-z])([A-Z])/g, '$1 $2').substr(1);
+		
+		//////////////////////////////////////////////
+		oDynamicLbl=new oLabel({text:sLabel}).setLabelFor(oDynamicTxt);
 		///Associate Labels with control and vice versa.
 		oDynamicTxt.addAriaLabelledBy(oDynamicLbl);
+		oDynamicTxt.addAriaDescribedBy(aLabels[i]);
 		aLayout.push([oDynamicLbl,oDynamicTxt]);	
 		j++;
 
+		
+		////////////////Logic for setting static combo box values//////////////
+		if(aLabels[i]=="warehouse"){
+			var oModel = new sap.ui.model.json.JSONModel();
+			oModel.setData({
+			       warehouses : [
+			          
+			        	{warehouse:"6014"},
+			        	{warehouse:"6015"},
+			        	{warehouse:"6016"},
+			        	{warehouse:"5017"},
+			        	{warehouse:"8018"},
+			        	{warehouse:"7019"}
+			               ]
+			});
+			oDynamicTxt.setModel(oModel);
+			var oItemTemplate1 = new sap.ui.core.ListItem();
+			oItemTemplate1.bindProperty("text", "warehouse");
+			oItemTemplate1.bindProperty("enabled", "enabled");
+			oDynamicTxt.bindItems("/warehouses", oItemTemplate1);
+			
+		}
+		else if(aLabels[i]=="fiscalYear"){
+			var oModel = new sap.ui.model.json.JSONModel();
+		oModel.setData({
+		       years : [
+		          
+		        	{year:"2014"},
+		        	{year:"2015"},
+		        	{year:"2016"},
+		        	{year:"2017"},
+		        	{year:"2018"},
+		        	{year:"2019"}
+		               ]
+		});
+		oDynamicTxt.setModel(oModel);
+		var oItemTemplate1 = new sap.ui.core.ListItem();
+		oItemTemplate1.bindProperty("text", "year");
+		oItemTemplate1.bindProperty("enabled", "enabled");
+		oDynamicTxt.bindItems("/years", oItemTemplate1);}
+		else if(aLabels[i]=="month"){
+			
+			var oModel = new sap.ui.model.json.JSONModel();
+			oModel.setData({
+			       months : [
+			          
+			        	{month:"jan"},
+			        	{month:"feb"},
+			        	{month:"mar"},
+			        	{month:"apr"},
+			        	{month:"may"},
+			        	{month:"jun"},
+			        	{month:"jul"},
+			        	{month:"aug"},
+			        	{month:"sept"},
+			        	{month:"oct"},
+			        	{month:"nov"},
+			        	{month:"dec"}
+			               ]
+			});
+			oDynamicTxt.setModel(oModel);
+			var oItemTemplate1 = new sap.ui.core.ListItem();
+			oItemTemplate1.bindProperty("text", "month");
+			oItemTemplate1.bindProperty("enabled", "enabled");
+			oDynamicTxt.bindItems("/months", oItemTemplate1);
+			
+		}
+		
+		
+		
+		//////////////////////////////////////////////////////////////////////
+		
 		/////////////Logic to add Input fields for search in the model
 		tabledata[0][aLabels[i]]="";
 		oDynamicTxt.attachChange(function(){
 			debugger;
-			tabledata[0][sap.ui.getCore().byId(this.mAssociations.ariaLabelledBy).getText()]=this.getValue();
-		})
+			tabledata[0][this.mAssociations.ariaDescribedBy[0]]=this.mProperties.value;
+		});
 		/////////////////////////////////////////////
 		/////////////////////////////////////////////
 		
@@ -150,12 +227,10 @@ var index=[];
   		});
 		//////////////////////////////////////////
         //////////////////////////////////////////	
- //sOutput table
-		  /*if(window.location.href.split("?")[1]=="asn")
-var sOutput=oBundle.getText("ASN_OUTPUT");
-		  else if(window.location.href.split("?")[1]=="bar")
-			  var sOutput=oBundle.getText("BAR_OUTPUT");*/
-		  
+
+		  	//tabledata is obtained initially from Oninit initially and when click of search button tabledata is changed.
+			//using dummy json data in tabledata now.
+		  	//Might not need switch case since output table is obtained from service only.
 		  var sKey = window.location.href.split("?")[1];
 			switch(sKey){
 			case "asn":
@@ -258,7 +333,8 @@ aColumnData.splice(0,0,"Select");
 		    		var currwidth = "100px";
 		    	}
 		    	else{
-		    		var Label = new sap.ui.commons.Label({text: oContext.getObject(),textAlign: sap.ui.core.TextAlign.Center});
+		    		var sLabel = oContext.getObject().replace(/([a-z])([A-Z])/g, '$1 $2').substr(0, 1).toUpperCase()+oContext.getObject().replace(/([a-z])([A-Z])/g, '$1 $2').substr(1);
+		    		var Label = new sap.ui.commons.Label({text: sLabel,textAlign: sap.ui.core.TextAlign.Center});
 		    		var currTemplate = new sap.ui.commons.TextView({textAlign: sap.ui.core.TextAlign.Center}).bindProperty("text",oContext.getObject());
 		    		var currwidth = "250px";
 		    	}
