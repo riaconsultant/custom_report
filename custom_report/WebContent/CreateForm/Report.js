@@ -307,8 +307,8 @@ aColumnData.splice(0,0,"Select");
 	        rows    : tableData
 	    });
 		  oTable = new sap.ui.table.Table({
-			 selectionBehavior:sap.ui.table.SelectionBehavior.Row ,
-			 selectionMode: sap.ui.table.SelectionMode.Single,
+			 selectionBehavior:sap.ui.table.SelectionBehavior.Row,
+			 selectionMode: sap.ui.table.SelectionMode.None,
 
 			 rowSelectionChange:function(oEvt)
 				{
@@ -406,8 +406,8 @@ aColumnData.splice(0,0,"Select");
 					        rows    : aDialTabledata
 					    });
 						 var oDialTable = new sap.ui.table.Table({
-							 selectionBehavior:sap.ui.table.SelectionBehavior.Row ,
-							 selectionMode: sap.ui.table.SelectionMode.Single,
+							 selectionBehavior:sap.ui.table.SelectionBehavior.Row,
+							 selectionMode: sap.ui.table.SelectionMode.None,
 							 visibleRowCount : 3,
 
 							 rowSelectionChange:function(oEvt)
