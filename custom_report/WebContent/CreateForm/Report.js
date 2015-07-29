@@ -409,7 +409,6 @@ aColumnData.splice(0,0,"Select");
 							 selectionBehavior:sap.ui.table.SelectionBehavior.Row,
 							 selectionMode: sap.ui.table.SelectionMode.None,
 							 visibleRowCount : 3,
-
 							 rowSelectionChange:function(oEvt)
 								{
 

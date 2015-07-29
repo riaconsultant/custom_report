@@ -43,7 +43,6 @@ sap.ui.controller("custom_report.RaiseTicket", {
 			width:"50%",
 			 selectionBehavior:sap.ui.table.SelectionBehavior.Row,
 			 selectionMode: sap.ui.table.SelectionMode.None,
-				
 				});
 
 			formTable.addColumn(new sap.ui.table.Column({
