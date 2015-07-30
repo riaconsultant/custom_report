@@ -1,0 +1,31 @@
+[main]
+Description=
+Host=124.30.124.226
+AuthType=1
+GroupName=mygroup
+GroupPwd=
+enc_GroupPwd=68023CC652C70A01D1F1CD361B98685F521F1641E22B4519C0E16650D6506CB3FA190BD4658BD94B572EA3ED72D872841F6AABACD0C3B482
+EnableISPConnect=0
+ISPConnectType=0
+ISPConnect=
+ISPCommand=
+Username=
+SaveUserPassword=0
+UserPassword=
+enc_UserPassword=
+NTDomain=
+EnableBackup=0
+BackupServer=
+EnableMSLogon=1
+MSLogonType=0
+EnableNat=1
+TunnelingMode=0
+TcpTunnelingPort=10000
+CertStore=2
+CertName=Arvind Brand
+CertPath=
+CertSubjectName=e=mohuls@arvindbrands.com\, shyamald@arvindbrands.com\, prakashn@arvindbrands.com,cn=Arvind Brand,o=Arvind Brand,l=BANGLORE - India,c=IN
+CertSerialHash=4DF96FB6AEE4C7694393E694636A02D6
+SendCertChain=0
+PeerTimeout=90
+EnableLocalLAN=0
