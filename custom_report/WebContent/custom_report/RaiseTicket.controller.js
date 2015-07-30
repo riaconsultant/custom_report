@@ -36,8 +36,56 @@ sap.ui.controller("custom_report.RaiseTicket", {
 //	}
 	raiseTicketUi:function(sSelected,obj)
 	{
-		
-		
+		var oBundle = jQuery.sap.resources({url : "/custom_report/i18n/german.properties", locale: "de"});
+		switch(sSelected){
+		case "asn":
+			var sOutput=oBundle.getText("ASN_OUTPUT");
+			////to get the correct data from dummy json. use appropriate data in case of real JSON.
+			break;
+		case "bar": 
+			var sOutput=oBundle.getText("BAR_OUTPUT");
+			break;
+		case "grn": 
+			var sOutput=oBundle.getText("GRN_OUTPUT");
+			break;
+		case "grndesc": 
+			var sOutput=oBundle.getText("GRN_DESC_OUTPUT");
+			break;
+		case "otif": 
+			var sOutput=oBundle.getText("OTIF_OUTPUT");
+			break;
+		case "qreport": 
+			var sOutput=oBundle.getText("QUALITY_OUTPUT");
+			break;
+		case "rreport": 
+			var sOutput=oBundle.getText("RATING_OUTPUT");
+			break;
+		case "vreport": 
+			var sOutput=oBundle.getText("RVENDOR_OUTPUT");
+			break;
+		case "sreport": 
+			var sOutput=oBundle.getText("SALES_OUTPUT");
+			break;
+		case "sohreport": 
+			var sOutput=oBundle.getText("SOH_OUTPUT");
+			break;
+		case "ireport": 
+			var sOutput=oBundle.getText("INVOICE_OUTPUT");
+			break;
+		case "lreport": 
+			var sOutput=oBundle.getText("LEDGER_OUTPUT");
+			break;
+		case "creport": 
+			var sOutput=oBundle.getText("CREDIT_OUTPUT");
+			break;
+		case "preport": 
+			var sOutput=oBundle.getText("PAYMENT_OUTPUT");
+			break;
+			
+			
+		}
+		debugger;
+var aColumnData=sOutput.split(",");
 		
 		var formTable = new sap.ui.table.Table({
 			width:"50%",
@@ -65,14 +113,24 @@ sap.ui.controller("custom_report.RaiseTicket", {
 				}));
 		
 			var aResultArr=[];
-			var formData = tabledata[0][sSelected][0];
+		/*	var formData = tabledata[0][sSelected][0];
 			$.each(formData, function(key, val) {
 			    //display the key and value pair
 				var sLabel = key.replace(/([a-z])([A-Z])/g, '$1 $2').substr(0, 1).toUpperCase()+key.replace(/([a-z])([A-Z])/g, '$1 $2').substr(1);
 			    var obj ={
 			key:sLabel,value:""};
 			aResultArr.push(obj);
-			});
+			});*/
+			
+			var aResultArr=[];
+			$.each(aColumnData, function(key, val) {
+						    //display the key and value pair
+				///Since we are using Column data we are getting key in columndata arrays value.
+				var sLabel = val.replace(/([a-z])([A-Z])/g, '$1 $2').substr(0, 1).toUpperCase()+val.replace(/([a-z])([A-Z])/g, '$1 $2').substr(1);
+							 var obj ={
+						key:sLabel,value:""};
+						aResultArr.push(obj);
+						});
 			
 			var oModel = new sap.ui.model.json.JSONModel();
 			oModel.setData({modelData: aResultArr});

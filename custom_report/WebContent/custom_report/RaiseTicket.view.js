@@ -43,20 +43,20 @@ sap.ui.jsview("custom_report.RaiseTicket", {
 		oModel.setData({
 		       processes : [
 		          
-		        	{key:"ASN",process:"ASN"},
-		        	{key:"BAR",process:"BAR"},
-		        	{key:"GRN",process:"GRN"},
-		        	{key:"GRNDesc",process:"GRN Descripency"},
-		        	{key:"OTIF",process:"OTIF"},
-		        	{key:"QREPORT",process:"Quality REPORT"},
-		        	{key:"RREPORT",process:"Rating REPORT"},
-		        	{key:"RETURN",process:"Return to Vendor"},
-		        	{key:"SALES",process:"Sales"},
-		        	{key:"SOH",process:"SOH"},
-		        	{key:"INVOICE",process:"Invoice"},
-		        	{key:"LEDGER",process:"Ledger"},
-		        	{key:"CREDIT",process:"Credit/Debit"},
-		        	{key:"PAYMENT",process:"Payment"}
+		        	{key:"asn",process:"ASN"},
+		        	{key:"bar",process:"BAR"},
+		        	{key:"grn",process:"GRN"},
+		        	{key:"grndesc",process:"GRN Descripency"},
+		        	{key:"otif",process:"OTIF"},
+		        	{key:"qreport",process:"Quality REPORT"},
+		        	{key:"rreport",process:"Rating REPORT"},
+		        	{key:"return",process:"Return to Vendor"},
+		        	{key:"sales",process:"Sales"},
+		        	{key:"soh",process:"SOH"},
+		        	{key:"invoice",process:"Invoice"},
+		        	{key:"ledger",process:"Ledger"},
+		        	{key:"credit",process:"Credit/Debit"},
+		        	{key:"payment",process:"Payment"}
 		        	
 		               ]
 		});
